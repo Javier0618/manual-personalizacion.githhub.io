@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Personalización de StreamFusion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        :root {
+            --primary: #0070f3;
+            --primary-hover: #0051a8;
+            --secondary: #f5f5f5;
+            --accent: #ff4081;
+            --text: #333;
+            --text-light: #666;
+            --background: #fff;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f9fafb;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Alerta */
+        .alert {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            margin-right: 10px;
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-trigger {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-trigger:hover {
+            color: var(--primary);
+        }
+
+        .tab-trigger.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: -2px;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Acordeón */
+        .accordion {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--secondary);
+            border: none;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .accordion-trigger:hover {
+            background-color: #e9e9e9;
+        }
+
+        .accordion-trigger i {
+            transition: var(--transition);
+        }
+
+        .accordion-trigger.active i {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: var(--background);
+        }
+
+        .accordion-content-inner {
+            padding: 15px;
+        }
+
+        /* Tarjetas */
+        .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 15px;
+            background-color: var(--secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .card-description {
+            margin: 5px 0 0;
+            color: var(--text-light);
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        /* Bloques de código */
+        pre {
+            background-color: #f5f7f9;
+            padding: 15px;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            border: 1px solid #e0e0e0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f7f9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Consejos */
+        .tip {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+        }
+
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+        }
+
+        /* Nota especial para cambio de idioma */
+        .language-note {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: var(--radius);
+        }
+
+        .language-note h3 {
+            color: #0d47a1;
+            margin-top: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tab-list {
+                flex-wrap: wrap;
+            }
+            
+            .tab-trigger {
+                flex: 1 0 auto;
+                text-align: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+
+        /* Estilos para el footer */
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manual de Personalización de StreamFusion</h1>
+        
+        <div class="alert">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Importante</div>
+                <p>Esta guía te ayudará a personalizar los elementos principales de tu aplicación StreamFusion. Asegúrate de hacer una copia de seguridad de los archivos originales antes de realizar cambios.</p>
+            </div>
+        </div>
+        
+        <div class="language-note">
+            <h3>Cambio de Idioma</h3>
+            <p>Si deseas cambiar el idioma en que se muestran los títulos y la información de las películas y series, debes buscar en el código todas las instancias de <code>es-MX</code> y cambiarlas por el código del idioma que desees:</p>
+            <ul>
+                <li><strong>Inglés:</strong> <code>en-US</code></li>
+                <li><strong>Español (España):</strong> <code>es-ES</code></li>
+                <li><strong>Francés:</strong> <code>fr-FR</code></li>
+                <li><strong>Alemán:</strong> <code>de-DE</code></li>
+                <li><strong>Italiano:</strong> <code>it-IT</code></li>
+                <li><strong>Portugués (Brasil):</strong> <code>pt-BR</code></li>
+            </ul>
+            <p>Estas referencias suelen encontrarse en las llamadas a la API de TMDB (The Movie Database) que obtiene la información de películas y series.</p>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab-list">
+                <button class="tab-trigger active" data-tab="inicio">Inicio</button>
+                <button class="tab-trigger" data-tab="movie">Películas</button>
+                <button class="tab-trigger" data-tab="serie">Series</button>
+                <button class="tab-trigger" data-tab="tv">TV en Vivo</button>
+            </div>
+            
+            <!-- Tab Inicio -->
+            <div id="inicio" class="tab-content active">
+                <h2>Personalización de la Sección Inicio</h2>
+                
+                <div class="accordion">
+                    <!-- Header -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Header
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Logo</h3>
+                                <p>Para cambiar el logo, busca la sección del header en el HTML:</p>
+                                <pre><code>&lt;header&gt;
+    &lt;div class="logo"&gt;
+        &lt;img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhqC8k7QO6KNqYZXNkGt-F0knO2XMq4VDjl0_sM6sbPa3FEt4_PyIs3oiThacqu1-jG7-8v7a14KGcjn8_YBEI33yLlrmcobGnt-TT9_TNMie71bwN_d9fSX6WTHSv4gtZgtN8CRyTIey5fRLOEFQmoYQ-bZImSBQXfvL6vMlJ55WORvg/s1600/StreamFusion.png" alt="StreamFusion"&gt;
+    &lt;/div&gt;
+    &lt;div class="logo-1"&gt;
+        &lt;h1 class="streamfusion"&gt;StreamFusion&lt;/h1&gt;
+    &lt;/div&gt;        
+    &lt;div class="search"&gt;
+        &lt;!-- Contenido del buscador --&gt;
+    &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+                                <p>Reemplaza la URL de la imagen con la URL de tu nuevo logo:</p>
+                                <pre><code>&lt;div class="logo"&gt;
+    &lt;img src="TU_NUEVA_URL_DE_LOGO" alt="StreamFusion"&gt;
+&lt;/div&gt;</code></pre>
+
+                                <h3>Cambiar el Color del Título</h3>
+                                <p>Para cambiar el color del título "StreamFusion", modifica la clase CSS "streamfusion":</p>
+                                <pre><code>.streamfusion {
+    font-weight: bold;
+    background: linear-gradient(90deg, red 0%, red 50%, yellow 50%, yellow 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}</code></pre>
+                                <p>Puedes cambiar los colores del gradiente o usar un color sólido:</p>
+                                <pre><code>/* Ejemplo con otros colores de gradiente */
+.streamfusion {
+    font-weight: bold;
+    background: linear-gradient(90deg, #3498db 0%, #3498db 50%, #2ecc71 50%, #2ecc71 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Ejemplo con color sólido */
+.streamfusion {
+    font-weight: bold;
+    color: #3498db;
+    -webkit-text-fill-color: #3498db;
+    background: none;
+}</code></pre>
+
+                                <h3>Cambiar el Color de Fondo del Header</h3>
+                                <p>Para cambiar el color de fondo del header, modifica la propiedad background-color:</p>
+                                <pre><code>header {
+    background-color: #0e0e0e; /* Cambia este color */
+    color: white;
+    padding: 0.2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    align-items: center;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Categorías -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar la Barra de Categorías
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Color de Fondo</h3>
+                                <p>Para cambiar el color de fondo de la barra de categorías, modifica la clase CSS "categories":</p>
+                                <pre><code>.categories {
+    display: flex;
+    overflow-x: auto;
+    padding: 0.2rem;
+    background-color: #fff; /* Cambia este color */
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 56px;
+    z-index: 999;
+}</code></pre>
+
+                                <h3>Cambiar el Color de las Categorías Seleccionadas</h3>
+                                <p>Para cambiar el color de las categorías seleccionadas, modifica la clase CSS "category.selected":</p>
+                                <pre><code>.category.selected {
+    background-color: red; /* Cambia este color */
+    color: white;
+}</code></pre>
+
+                                <h3>Añadir o Quitar Categorías</h3>
+                                <p>Para añadir o quitar categorías, modifica la sección HTML de categorías:</p>
+                                <pre><code>&lt;section class="categories"&gt;
+    &lt;div class="category selected" data-category="inicio"&gt;Inicio&lt;/div&gt;
+    &lt;div class="category" data-category="peliculas"&gt;Películas&lt;/div&gt;
+    &lt;div class="category" data-category="series"&gt;Series&lt;/div&gt;
+    &lt;div class="category" data-category="animes"&gt;Animes&lt;/div&gt;
+    &lt;div class="category" data-category="doramas"&gt;Doramas&lt;/div&gt;
+    &lt;div class="category" data-category="continuar-viendo"&gt;Visto&lt;/div&gt;
+    &lt;div class="category" data-category="TV2"&gt;&lt;a href="go:TV2" target="_blank" style="text-decoration: none; color: inherit" rel="noreferrer"&gt;TV&lt;/a&gt;&lt;/div&gt;
+    &lt;div class="category" data-category="Radio"&gt;&lt;a href="go:radios" target="_blank" style="text-decoration: none; color: inherit" rel="noreferrer"&gt;Radio&lt;/a&gt;&lt;/div&gt;
+    &lt;div class="category" data-category="peticion"&gt;&lt;a href="go:sr" target="_blank" style="text-decoration: none; color: inherit" rel="noreferrer"&gt;S/R&lt;/a&gt;&lt;/div&gt;       
+&lt;/section&gt;</code></pre>
+                                <p>Para añadir una nueva categoría, agrega un nuevo elemento div con la clase "category":</p>
+                                <pre><code>&lt;div class="category" data-category="documentales"&gt;Documentales&lt;/div&gt;</code></pre>
+                                <p>Para eliminar una categoría, simplemente elimina el elemento div correspondiente.</p>
+                                <div class="warning">
+                                    <p><strong>Importante:</strong> Si añades una nueva categoría, también deberás añadir la lógica JavaScript correspondiente para que funcione correctamente. Busca la sección donde se manejan los eventos de clic en las categorías.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Servicios de Streaming -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar los Servicios de Streaming
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Color de Fondo</h3>
+                                <p>Para cambiar el color de fondo de la sección de servicios de streaming, modifica la clase CSS "streaming-services":</p>
+                                <pre><code>.streaming-services {
+    display: flex;
+    justify-content: space-around;
+    padding: 0.2rem;
+    background-color: #fff; /* Cambia este color */
+    border-bottom: 1px solid #ddd;
+}</code></pre>
+
+                                <h3>Añadir o Quitar Servicios</h3>
+                                <p>Para añadir o quitar servicios de streaming, modifica la sección HTML de servicios:</p>
+                                <pre><code>&lt;section class="streaming-services"&gt;
+    &lt;div class="service" data-service="netflix"&gt;
+        &lt;img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Netflix_logo.svg" alt="Netflix"&gt;
+    &lt;/div&gt;
+    &lt;div class="service" data-service="disney"&gt;
+        &lt;img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" alt="Disney+"&gt;
+    &lt;/div&gt;
+    &lt;div class="service" data-service="hbo"&gt;
+        &lt;img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Max_logo.svg" alt="HBO Max"&gt;
+    &lt;/div&gt;
+    &lt;div class="service" data-service="prime"&gt;
+        &lt;img src="https://cdn.worldvectorlogo.com/logos/amazon-prime-video-1.svg" alt="Prime Video"&gt;
+    &lt;/div&gt;
+    &lt;div class="service" data-service="paramount"&gt;
+        &lt;img src="https://upload.wikimedia.org/wikipedia/commons/9/90/Paramount_Pictures_Corporation_logo.svg" alt="Paramount+"&gt;
+    &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+                                <p>Para añadir un nuevo servicio, agrega un nuevo elemento div con la clase "service":</p>
+                                <pre><code>&lt;div class="service" data-service="apple"&gt;
+    &lt;img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Apple_TV_Plus_logo.svg" alt="Apple TV+"&gt;
+&lt;/div&gt;</code></pre>
+                                <p>Para eliminar un servicio, simplemente elimina el elemento div correspondiente.</p>
+                                <div class="warning">
+                                    <p><strong>Importante:</strong> Si añades un nuevo servicio, también deberás añadir los IDs de contenido en JavaScript para que funcione correctamente.</p>
+                                </div>
+                                <h4>Añadir IDs de contenido en JavaScript</h4>
+                                <pre><code>// Añadir estos arrays después de los otros servicios
+const appleMovieIds = [123456, 234567, 345678]; // Reemplaza con IDs reales
+const appleSeriesIds = [456789, 567890, 678901]; // Reemplaza con IDs reales
+
+// Actualizar el event listener para incluir el nuevo servicio
+services.forEach(service => {
+    service.addEventListener('click', (event) => {
+        const selectedService = event.currentTarget.dataset.service;
+        let movieIds = [];
+        let seriesIds = [];
+
+        if (selectedService === 'netflix') {
+            movieIds = [...netflixMovieIds];
+            seriesIds = [...netflixSeriesIds];
+        } else if (selectedService === 'disney') {
+            movieIds = [...disneyMovieIds];
+            seriesIds = [...disneySeriesIds];
+        } else if (selectedService === 'hbo') {
+            movieIds = [...hboMovieIds];
+            seriesIds = [...hboSeriesIds];
+        } else if (selectedService === 'prime') {
+            movieIds = [...primeMovieIds];
+            seriesIds = [...primeSeriesIds];
+        } else if (selectedService === 'paramount') {
+            movieIds = [...paramountMovieIds];
+            seriesIds = [...paramountSeriesIds];
+        } else if (selectedService === 'apple') { // Añadir esta condición
+            movieIds = [...appleMovieIds];
+            seriesIds = [...appleSeriesIds];
+        }
+
+        // Resto del código...
+    });
+});</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Colores Principales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Cambiar los Colores Principales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>Para cambiar los colores principales de la aplicación, busca la sección de estilos CSS al inicio del archivo:</p>
+                                <pre><code>body {
+    font-family: sans-serif;
+    background-color: #0e0e0e; /* Color de fondo principal */
+    margin: 0;
+    padding: 0;
+    color: #333;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}</code></pre>
+                                <p>Puedes cambiar el color de fondo principal modificando el valor de "background-color".</p>
+                                <p>También puedes modificar otros colores importantes como:</p>
+                                <ul>
+                                    <li>El color de fondo del header</li>
+                                    <li>El color de los botones y elementos interactivos</li>
+                                    <li>El color de los textos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Películas -->
+            <div id="movie" class="tab-content">
+                <h2>Personalización de la Sección Películas</h2>
+                
+                <div class="accordion">
+                    <!-- Colores Principales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Cambiar los Colores Principales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>La sección de películas utiliza variables CSS para definir los colores principales. Puedes modificar estas variables para cambiar el aspecto visual:</p>
+                                <pre><code>:root {
+    --background-primary: #121212;    /* Fondo principal */
+    --background-secondary: #1E1E1E;  /* Fondo secundario */
+    --text-primary: #FFFFFF;          /* Texto principal */
+    --text-secondary: #dedede;        /* Texto secundario */
+    --accent-primary: #E50914;        /* Color de acento primario (rojo) */
+    --accent-secondary: #F5C518;      /* Color de acento secundario (amarillo) */
+    --ui-element: #2C2C2C;            /* Elementos de UI */
+    --ui-hover: #454545;              /* Estado hover de elementos UI */
+}</code></pre>
+                                <p>Cambia estos valores para personalizar completamente el esquema de colores de la página de películas.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Header -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Header
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Título y los Iconos</h3>
+                                <p>Para modificar el header de la sección de películas, busca el siguiente código HTML:</p>
+                                <pre><code>&lt;header&gt;
+    &lt;div class="logo"&gt;
+        &lt;a href="go:home" class="back-link"&gt;&lt;i class="fas fa-chevron-left"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="header-content"&gt;      	
+        &lt;h1&gt;StreamFusion&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;div class="logo"&gt;
+        &lt;a href="go:sr" class="report"&gt;&lt;i class="fas fa-exclamation"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El texto del título (h1)</li>
+                                    <li>Los iconos de Font Awesome (cambiando las clases "fa-chevron-left" y "fa-exclamation")</li>
+                                    <li>Los enlaces de los botones (modificando los valores "go:home" y "go:sr")</li>
+                                </ul>
+                                <p>También puedes modificar el estilo del header en CSS:</p>
+                                <pre><code>header {
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    padding: 0.2rem 0;
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    align-items: center;
+    height: 40px;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reproductor de Video -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Reproductor de Video
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo del Reproductor</h3>
+                                <p>Para modificar el aspecto del reproductor de video, busca las clases CSS relacionadas:</p>
+                                <pre><code>.videoPlayer {
+   height: calc(100% - 40px);
+   padding: 1vw;
+   position: relative;
+}
+.videoPlayer iframe {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--accent-secondary); /* Borde del reproductor */
+    border-radius: 10px; /* Bordes redondeados */
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El color del borde (modificando la variable --accent-secondary o usando un color directo)</li>
+                                    <li>El radio de los bordes (border-radius)</li>
+                                    <li>El padding alrededor del reproductor</li>
+                                </ul>
+
+                                <h3>Personalizar el Botón de Recarga</h3>
+                                <p>Para modificar el botón de recarga del video:</p>
+                                <pre><code>.reload-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7); /* Color de fondo */
+    color: white; /* Color del icono */
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 10;
+}
+
+.reload-button:hover {
+    background-color: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.reload-button:active {
+    transform: scale(0.95);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información de la Película -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar la Información de la Película
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de la Información</h3>
+                                <p>Para modificar el aspecto de la sección de información de la película:</p>
+                                <pre><code>.movie-info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 10px;
+    background-color: var(--background-secondary); /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.movie-details {
+    flex: 0 0 70%;
+    max-width: 70%;
+    background-color: var(--background-secondary);
+    padding-left: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.movie-details h2 {
+    font-size: 1.5vw;
+    line-height: 1;
+    margin-bottom: 0px;
+    margin-top: 0;
+    color: var(--accent-secondary); /* Color del título */
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>Los colores de fondo (background-color)</li>
+                                    <li>Los colores de texto (color)</li>
+                                    <li>El radio de los bordes (border-radius)</li>
+                                    <li>Las sombras (box-shadow)</li>
+                                    <li>Los tamaños de fuente (font-size)</li>
+                                </ul>
+                                
+                                <h3>Personalizar la Descripción de la Película</h3>
+                                <pre><code>.movie-overview {
+    background-color: var(--ui-element);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 1000px;
+    margin: 15px auto;
+    text-align: left;
+    font-size: 1.3em;
+    color: var(--text-secondary);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Películas Relacionadas -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar las Películas Relacionadas
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de las Películas Relacionadas</h3>
+                                <p>Para modificar el aspecto de la sección de películas relacionadas:</p>
+                                <pre><code>.related-movies-2 {
+    display: flex;
+    height: 40%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0.5vw;
+    border-radius: 10px;
+}
+
+.related-movies-2 .item {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+    width: 200px; /* Ancho de las miniaturas */
+    padding-right: 0.3em;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-movies-2 .item img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px; /* Bordes redondeados de las imágenes */
+    transition: transform 0.3s ease;
+}
+
+.related-movies-2 .item:hover img {
+    transform: scale(1.05); /* Efecto hover */
+}
+
+.related-movies-2 .item-title {
+    margin-top: 5px;
+    font-size: 14px;
+    text-align: center;
+    color: var(--text-primary);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El ancho de las miniaturas (width)</li>
+                                    <li>El radio de los bordes (border-radius)</li>
+                                    <li>El efecto hover (transform)</li>
+                                    <li>El espaciado entre elementos (padding)</li>
+                                    <li>El color y transparencia del fondo del título (background-color)</li>
+                                </ul>
+                                
+                                <h3>Personalizar la Calificación de las Películas</h3>
+                                <pre><code>.item-rating {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFD700; /* Color dorado para las estrellas */
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 5px;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Series -->
+            <div id="serie" class="tab-content">
+                <h2>Personalización de la Sección Series</h2>
+                
+                <div class="accordion">
+                    <!-- Colores Principales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Cambiar los Colores Principales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>Al igual que en la sección de películas, la sección de series utiliza variables CSS para definir los colores principales:</p>
+                                <pre><code>:root {
+    --background-primary: #121212;    /* Fondo principal */
+    --background-secondary: #1e1e1e;  /* Fondo secundario */
+    --text-primary: #ffffff;          /* Texto principal */
+    --text-secondary: #dedede;        /* Texto secundario */
+    --accent-primary: #e50914;        /* Color de acento primario (rojo) */
+    --accent-secondary: #f5c518;      /* Color de acento secundario (amarillo) */
+    --ui-element: #2c2c2c;            /* Elementos de UI */
+    --ui-hover: #454545;              /* Estado hover de elementos UI */
+}</code></pre>
+                                <p>Cambia estos valores para personalizar completamente el esquema de colores de la página de series.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Header -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Header
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Título y los Iconos</h3>
+                                <p>Para modificar el header de la sección de series, busca el siguiente código HTML:</p>
+                                <pre><code>&lt;header&gt;
+    &lt;div class="logo"&gt;
+        &lt;a href="go:home" class="back-link"&gt;&lt;i class="fas fa-chevron-left"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="header-content"&gt;      	
+        &lt;h1&gt;StreamFusion&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;div class="logo"&gt;
+        &lt;a href="go:sr" class="report"&gt;&lt;i class="fas fa-exclamation"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/header&gt;</code></pre>
+                                <p>Puedes cambiar los mismos elementos que en la sección de películas: título, iconos y enlaces.</p>
+                                <p>También puedes modificar el estilo del header en CSS:</p>
+                                <pre><code>header {
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    padding: 0.2rem 0;
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    align-items: center;
+    height: 40px;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reproductor de Video -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Reproductor de Video
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo del Reproductor</h3>
+                                <p>Para modificar el aspecto del reproductor de video en la sección de series:</p>
+                                <pre><code>.videoPlayer {
+    height: calc(100% - 40px);
+    padding: 1vw;
+    position: relative;
+}
+.videoPlayer iframe {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--accent-secondary); /* Borde del reproductor */
+    border-radius: 10px; /* Bordes redondeados */
+}</code></pre>
+                                <p>Las opciones de personalización son similares a las de la sección de películas.</p>
+                                
+                                <h3>Personalizar el Botón de Recarga</h3>
+                                <p>Para modificar el botón de recarga del video:</p>
+                                <pre><code>.reload-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    z-index: 10;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información de la Serie -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar la Información de la Serie
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de la Información</h3>
+                                <p>Para modificar el aspecto de la sección de información de la serie:</p>
+                                <pre><code>.series-info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 10px;
+    background-color: var(--background-secondary); /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.series-details {
+    flex: 0 0 70%;
+    max-width: 70%;
+    background-color: var(--background-secondary);
+    padding-left: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Sombra */
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.series-details h2 {
+    font-size: 1.5vw;
+    line-height: 1;
+    margin-bottom: 0;
+    margin-top: 0;
+    color: var(--accent-secondary); /* Color del título */
+}</code></pre>
+                                <p>Puedes cambiar los mismos elementos que en la sección de información de películas.</p>
+                                
+                                <h3>Personalizar la Descripción de la Serie</h3>
+                                <pre><code>.series-seasons {
+    background-color: var(--ui-element);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 1000px;
+    margin: 15px auto;
+    text-align: left;
+    font-size: 1.3em;
+    color: var(--text-secondary);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Selección de Episodios -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar la Selección de Episodios
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo del Selector de Temporadas</h3>
+                                <p>Para modificar el aspecto del selector de temporadas:</p>
+                                <pre><code>.season-dropdown {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.season-dropdown select {
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--ui-element); /* Color de fondo */
+    color: var(--text-primary); /* Color del texto */
+    cursor: pointer;
+    appearance: none;
+}
+
+.season-dropdown select:hover {
+    background-color: var(--ui-hover); /* Color al pasar el cursor */
+}</code></pre>
+                                <p>Puedes cambiar los colores, tamaños y bordes para personalizar el selector de temporadas.</p>
+
+                                <h3>Cambiar el Estilo de los Episodios</h3>
+                                <p>Para modificar el aspecto de los botones de episodios:</p>
+                                <pre><code>.episodes-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.episodes-slider .episode {
+    flex: 0 0 auto;
+    width: 7vh;
+    height: 7vh;
+    margin: 0.3vw;
+    background: var(--ui-element); /* Color de fondo */
+    border-radius: 50%; /* Forma circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    font-size: 1.5em;
+    color: var(--text-primary); /* Color del texto */
+    cursor: pointer;
+}
+
+.episode.selected {
+    background-color: var(--accent-primary); /* Color cuando está seleccionado */
+    color: var(--text-primary);
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El tamaño de los botones (width, height)</li>
+                                    <li>La forma (border-radius)</li>
+                                    <li>Los colores de fondo y texto</li>
+                                    <li>El color cuando está seleccionado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Series Recomendadas -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar las Series Recomendadas
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de las Series Recomendadas</h3>
+                                <p>Para modificar el aspecto de la sección de series recomendadas:</p>
+                                <pre><code>.recommended-series-2 {
+    display: flex;
+    height: 40%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0.5vw;
+    border-radius: 10px;
+}
+
+.recommended-series-2 .item {
+    flex: none;
+    width: 200px; /* Ancho de las miniaturas */
+    padding-right: 0.3em;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.recommended-series-2 .item img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px; /* Bordes redondeados de las imágenes */
+    transition: transform 0.3s ease;
+}
+
+.recommended-series-2 .item:hover img {
+    transform: scale(1.05); /* Efecto hover */
+}
+
+.recommended-series-2 .item-title {
+    margin-top: 5px;
+    font-size: 14px;
+    text-align: center;
+    color: var(--text-primary);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}</code></pre>
+                                <p>Las opciones de personalización son similares a las de la sección de películas relacionadas.</p>
+                                
+                                <h3>Personalizar la Calificación de las Series</h3>
+                                <pre><code>.rating-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFD700; /* Color dorado para las estrellas */
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 4px;
+    border-radius: 5px;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab TV en Vivo -->
+            <div id="tv" class="tab-content">
+                <h2>Personalización de la Sección TV en Vivo</h2>
+                
+                <div class="accordion">
+                    <!-- Colores Principales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Cambiar los Colores Principales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>La sección de TV en vivo utiliza colores directos en el CSS. Puedes modificar estos colores para cambiar el aspecto visual:</p>
+                                <pre><code>body {
+    font-family: Arial, sans-serif;
+    background-color: #0c0d19; /* Color de fondo principal */
+    color: #fff; /* Color de texto principal */
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0c0d19; /* Color de fondo del header */
+    color: #fd9c0d; /* Color del título */
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    height: 50px;
+}</code></pre>
+                                <p>Puedes cambiar estos colores para personalizar el aspecto de la página de TV en vivo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Header -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Header
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Título y los Iconos</h3>
+                                <p>Para modificar el header de la sección de TV en vivo, busca el siguiente código HTML:</p>
+                                <pre><code>&lt;header class="header"&gt;
+    &lt;a href="go:home" class="back-link"&gt;&lt;i class="fas fa-chevron-left"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;h1 class="title streamfusion"&gt;StreamFusion&lt;/h1&gt;
+    &lt;div style="width: 20px;"&gt;&lt;/div&gt; &lt;!-- Espacio vacío para alinear el título --&gt;
+&lt;/header&gt;</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El texto del título (h1)</li>
+                                    <li>El icono de regreso (cambiando la clase "fa-chevron-left")</li>
+                                    <li>El enlace del botón de regreso (modificando el valor "go:home")</li>
+                                </ul>
+                                <p>También puedes modificar el estilo del header en CSS:</p>
+                                <pre><code>.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0c0d19; /* Color de fondo */
+    color: #fd9c0d; /* Color del título */
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    height: 50px;
+}
+
+.header .back-link {
+    color: #fff; /* Color del icono */
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.header .title {
+    font-size: 20px;
+    font-weight: bold;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reproductor de Video -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar el Reproductor de Video
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo del Reproductor</h3>
+                                <p>Para modificar el aspecto del reproductor de video en la sección de TV en vivo:</p>
+                                <pre><code>#video-container {
+    width: 100%;
+    position: relative;
+    background-color: #000; /* Color de fondo */
+    overflow: hidden;
+}
+
+.player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #000; /* Color de fondo */
+    display: none;
+}
+
+.player.active {
+    display: block;
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El color de fondo del contenedor y del reproductor</li>
+                                    <li>El ajuste de la imagen (object-fit)</li>
+                                </ul>
+                                
+                                <h3>Personalizar el Botón de Pantalla Completa</h3>
+                                <pre><code>.fullscreen-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1001;
+    font-size: 14px;
+}
+
+.fullscreen-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Color al pasar el cursor */
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Categorías -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar las Categorías
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de las Categorías</h3>
+                                <p>Para modificar el aspecto de la lista de categorías:</p>
+                                <pre><code>.category-list-container {
+    min-width: 40%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.88); /* Color de fondo */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category-list button {
+    padding: 10px 0;
+    background-color: transparent;
+    color: #fff; /* Color del texto */
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    text-align: left;
+}
+
+.category-list button.selected {
+    color: #ff7f00; /* Color cuando está seleccionado */
+    font-weight: bold;
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El color de fondo del contenedor</li>
+                                    <li>El color del texto de las categorías</li>
+                                    <li>El color de la categoría seleccionada</li>
+                                    <li>El tamaño de fuente y el espaciado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Personalizar los Canales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Cambiar el Estilo de los Canales</h3>
+                                <p>Para modificar el aspecto de la lista de canales:</p>
+                                <pre><code>.channel-list-container {
+    min-width: 60%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #0c0d19; /* Color de fondo */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.channel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.channel-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.channel-item:hover {
+    background-color: #1e1e24; /* Color al pasar el cursor */
+}
+
+.channel-item.selected {
+    background-color: #ff7f00; /* Color cuando está seleccionado */
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.channel-logo {
+    width: 50px;
+    height: 50px;
+    background-color: #0c0d19; /* Color de fondo del logo */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    flex-shrink: 0;
+}</code></pre>
+                                <p>Puedes cambiar:</p>
+                                <ul>
+                                    <li>El color de fondo del contenedor</li>
+                                    <li>El color de fondo al pasar el cursor</li>
+                                    <li>El color cuando un canal está seleccionado</li>
+                                    <li>El tamaño y forma de los logos de canales</li>
+                                    <li>El espaciado y bordes</li>
+                                </ul>
+                                
+                                <h3>Personalizar el Buscador</h3>
+                                <pre><code>.search-bar {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #1e1e24;
+    color: #fff;
+}
+
+.search-bar::placeholder {
+    color: #999;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Añadir o Quitar Canales -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Añadir o Quitar Canales
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Modificar la Lista de Canales</h3>
+                                <p>Para añadir o quitar canales, busca el array "channels" en el código JavaScript:</p>
+                                <pre><code>const channels = [
+    {
+        id: "caracol-tv",
+        name: "Caracol TV",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Caracol_Televisi%C3%B3n_logo.svg/512px-Caracol_Televisi%C3%B3n_logo.svg.png",
+        type: "hls",
+        source: "https://mdstrm.com/live-stream-playlist/574463697b9817cf0886fc17.m3u8",
+        categories: ["Colombia"]
+    },
+    {
+        id: "caracol-internacional",
+        name: "Caracol Internacional",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Caracol_Internacional_2023.png",
+        type: "iframe",
+        source: "https://embed.sdfgnksbounce.com/embed2/caracol.html",
+        categories: ["Colombia"]
+    },
+    // Más canales...
+]</code></pre>
+                                <p>Para añadir un nuevo canal, agrega un nuevo objeto al array con la siguiente estructura:</p>
+                                <pre><code>{
+    id: "id-unico-del-canal", // ID único para el canal
+    name: "Nombre del Canal", // Nombre que se mostrará
+    logo: "URL_DEL_LOGO", // URL del logo del canal
+    type: "hls", // Tipo: "hls" para streaming HLS o "iframe" para embebidos
+    source: "URL_DE_LA_FUENTE", // URL del stream o iframe
+    categories: ["Categoría1", "Categoría2"] // Categorías a las que pertenece
+}</code></pre>
+                                <p>Para eliminar un canal, simplemente elimina el objeto correspondiente del array.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Añadir o Quitar Categorías -->
+                    <div class="accordion-item">
+                        <button class="accordion-trigger">
+                            Añadir o Quitar Categorías
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <h3>Modificar la Lista de Categorías</h3>
+                                <p>Para añadir o quitar categorías, busca el array "categories" en el código JavaScript:</p>
+                                <pre><code>const categories = [
+    { id: "all", name: "Todos" },
+    { id: "Argentina", name: "Argentina" },
+    { id: "Colombia", name: "Colombia" },
+    { id: "España", name: "España" },
+    { id: "Mexico", name: "Mexico" },
+    { id: "Venezuela", name: "Venezuela" },
+    { id: "Cristiano", name: "Cristiano" },
+    { id: "Musica", name: "Música" },
+    { id: "Noticias", name: "Noticias" },
+    { id: "Deportes", name: "Deportes" },
+    { id: "Infantil", name: "Infantil" },
+    { id: "Entretenimiento", name: "Entretenimiento" },
+    { id: "Novelas", name: "Novelas" },
+    { id: "Peliculas", name: "Películas" }
+]</code></pre>
+                                <p>Para añadir una nueva categoría, agrega un nuevo objeto al array con la siguiente estructura:</p>
+                                <pre><code>{ 
+    id: "id-categoria", // ID único para la categoría (usado en los canales)
+    name: "Nombre Categoría" // Nombre que se mostrará
+}</code></pre>
+                                <p>Para eliminar una categoría, simplemente elimina el objeto correspondiente del array.</p>
+                                <div class="warning">
+                                    <p><strong>Importante:</strong> Asegúrate de que los IDs de las categorías coincidan con los que se usan en los canales.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Consejos Adicionales</h2>
+                <p class="card-description">Recomendaciones generales para personalizar StreamFusion</p>
+            </div>
+            <div class="card-content">
+                <ul>
+                    <li>Siempre haz una copia de seguridad de los archivos originales antes de realizar cambios.</li>
+                    <li>Prueba los cambios en un entorno de desarrollo antes de implementarlos en producción.</li>
+                    <li>Si añades nuevas categorías o servicios, asegúrate de actualizar también la lógica JavaScript correspondiente.</li>
+                    <li>Para cambios más avanzados, considera consultar la documentación de las APIs utilizadas.</li>
+                    <li>Si encuentras problemas, revisa la consola del navegador para identificar posibles errores.</li>
+                    <li>Utiliza herramientas como el inspector de elementos del navegador para probar cambios de estilo antes de implementarlos.</li>
+                    <li>Mantén la coherencia visual en todas las secciones para una mejor experiencia de usuario.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Manual de Personalización de StreamFusion &copy; 2024</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Funcionalidad de las pestañas
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabTriggers = document.querySelectorAll('.tab-trigger');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    // Desactivar todas las pestañas
+                    tabTriggers.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Activar la pestaña seleccionada
+                    trigger.classList.add('active');
+                    const tabId = trigger.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Funcionalidad del acordeón
+            const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+            
+            accordionTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const content = trigger.nextElementSibling;
+                    const isActive = trigger.classList.contains('active');
+                    
+                    // Cerrar todos los acordeones abiertos en la misma pestaña
+                    const parentTab = trigger.closest('.tab-content');
+                    if (parentTab) {
+                        const accordionsInTab = parentTab.querySelectorAll('.accordion-trigger');
+                        accordionsInTab.forEach(accTrigger => {
+                            if (accTrigger !== trigger) {
+                                accTrigger.classList.remove('active');
+                                accTrigger.nextElementSibling.style.maxHeight = null;
+                            }
+                        });
+                    }
+                    
+                    // Alternar el estado del acordeón actual
+                    if (isActive) {
+                        trigger.classList.remove('active');
+                        content.style.maxHeight = null;
+                    } else {
+                        trigger.classList.add('active');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
